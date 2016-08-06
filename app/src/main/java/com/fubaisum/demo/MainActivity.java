@@ -1,7 +1,9 @@
-package com.fubaisum.ptrlyout;
+package com.fubaisum.demo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.fubaisum.ptrlayout.demo.R;
 
 public class MainActivity extends AppCompatActivity {
 
