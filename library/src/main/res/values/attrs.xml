@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- PtrLayout -->
+    <attr name="target" format="reference" />
+    <attr name="header" format="reference" />
+    <attr name="footer" format="reference" />
+    <declare-styleable name="PtrLayout">
+        <attr name="target" />
+        <attr name="header" />
+        <attr name="footer" />
+    </declare-styleable>
+
+</resources>
