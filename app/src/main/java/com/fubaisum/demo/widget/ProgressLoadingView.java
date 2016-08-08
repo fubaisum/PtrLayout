@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 
 import com.fubaisum.ptrlayout.LoadingView;
 import com.fubaisum.ptrlayout.PtrLayout;
@@ -12,7 +13,7 @@ import com.fubaisum.ptrlayout.PtrLayout;
 /**
  * Created by sum on 8/6/16.
  */
-public class ProgressLoadingView extends View implements LoadingView {
+public class ProgressLoadingView extends ProgressBar implements LoadingView {
 
     private int height;
     private static final int EXIT_ANIM_DURATION = 600;

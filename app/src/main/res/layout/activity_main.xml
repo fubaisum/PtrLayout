@@ -10,6 +10,7 @@
         android:id="@+id/ptr_layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ffffff"
         app:loading_view="@+id/v_ptr_loading"
         app:refresh_view="@+id/v_ptr_refresh"
         app:target_view="@+id/recycler_view_main">
@@ -18,25 +19,26 @@
             android:id="@+id/recycler_view_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#eeeeee"
+            android:background="#dddddd"
             android:orientation="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
         <com.fubaisum.demo.widget.ProgressRefreshView
             android:id="@+id/v_ptr_refresh"
-            android:layout_width="match_parent"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:layout_gravity="top"
+            android:layout_gravity="top|center_horizontal"
             android:layout_marginTop="-100dp"
-            android:background="#00ccaa" />
+            android:indeterminate="true" />
 
         <com.fubaisum.demo.widget.ProgressLoadingView
             android:id="@+id/v_ptr_loading"
-            android:layout_width="match_parent"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="-100dp"
-            android:background="#aacc00" />
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="-100dp" />
 
     </com.fubaisum.ptrlayout.PtrLayout>
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 
 import com.fubaisum.ptrlayout.PtrLayout;
 import com.fubaisum.ptrlayout.RefreshView;
@@ -12,7 +13,7 @@ import com.fubaisum.ptrlayout.RefreshView;
 /**
  * Created by sum on 8/6/16.
  */
-public class ProgressRefreshView extends View implements RefreshView {
+public class ProgressRefreshView extends ProgressBar implements RefreshView {
 
     private int height;
     private static final int EXIT_ANIM_DURATION = 600;

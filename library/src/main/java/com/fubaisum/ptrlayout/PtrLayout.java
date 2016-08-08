@@ -293,6 +293,9 @@ public class PtrLayout extends FrameLayout {
     }
 
     public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+        if (refreshView == null) {
+            throw new NullPointerException("There is no refresh view.");
+        }
         this.onRefreshListener = onRefreshListener;
     }
 
@@ -304,6 +307,9 @@ public class PtrLayout extends FrameLayout {
     }
 
     public void setOnLoadingListener(OnLoadingListener onLoadingListener) {
+        if (loadingView == null) {
+            throw new NullPointerException("There is no loading view.");
+        }
         this.onLoadingListener = onLoadingListener;
     }
 }
