@@ -5,7 +5,7 @@ package com.fubaisum.ptrlayout;
  */
 public interface RefreshView {
 
-    void onPullingDown(int offset);
+    void onPullingDown(float offset);
 
     void onRelease();
 

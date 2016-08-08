@@ -5,7 +5,7 @@ package com.fubaisum.ptrlayout;
  */
 public interface LoadingView {
 
-    void onPullingUp(int offset);
+    void onPullingUp(float offset);
 
     void onRelease();
 
