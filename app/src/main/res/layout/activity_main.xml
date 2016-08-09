@@ -1,45 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fubaisum.demo.MainActivity">
+    tools:context="com.fubaisum.demo.main.MainActivity">
 
-    <com.fubaisum.ptrlayout.PtrLayout
-        android:id="@+id/ptr_layout_main"
+    <fragment
+        android:name="com.fubaisum.demo.main.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        app:loading_view="@+id/v_ptr_loading"
-        app:refresh_view="@+id/v_ptr_refresh"
-        app:target_view="@+id/recycler_view_main">
+        android:tag="MainFragment" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#dddddd"
-            android:orientation="vertical"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-        <com.fubaisum.demo.widget.ProgressRefreshView
-            android:id="@+id/v_ptr_refresh"
-            style="?android:attr/progressBarStyleInverse"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="-100dp"
-            android:indeterminate="true" />
-
-        <com.fubaisum.demo.widget.ProgressLoadingView
-            android:id="@+id/v_ptr_loading"
-            style="?android:attr/progressBarStyleInverse"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="-100dp" />
-
-    </com.fubaisum.ptrlayout.PtrLayout>
-
-</RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_main_item_label"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:background="@color/color_00a0e9"
+    android:gravity="center"
+    android:minHeight="96dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:textColor="@color/white"
+    android:textSize="18sp"
+    tools:text="Hello World!!!" />
