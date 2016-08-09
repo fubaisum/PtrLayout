@@ -32,6 +32,7 @@ public class PtrLayout extends FrameLayout {
     private static final int INVALID_POINTER = -1;
     private int mActivePointerId;
     private float mInitialDownY;
+    private boolean isTargetViewAlwaysCanScroll;//Just for the target view which don't implement ScrollView.
 
     private OnRefreshListener onRefreshListener;
     private OnLoadingListener onLoadingListener;
@@ -149,7 +150,7 @@ public class PtrLayout extends FrameLayout {
      * scroll up. Override this if the target view is a custom view.
      */
     private boolean canTargetViewScrollUp() {
-        return ViewCompat.canScrollVertically(targetView, -1);
+        return isTargetViewAlwaysCanScroll || ViewCompat.canScrollVertically(targetView, -1);
     }
 
     /**
@@ -157,7 +158,7 @@ public class PtrLayout extends FrameLayout {
      * scroll down. Override this if the target view is a custom view.
      */
     private boolean canTargetViewScrollDown() {
-        return ViewCompat.canScrollVertically(targetView, 1);
+        return isTargetViewAlwaysCanScroll || ViewCompat.canScrollVertically(targetView, 1);
     }
 
     @Override
@@ -271,6 +272,10 @@ public class PtrLayout extends FrameLayout {
 
     public View getTargetView() {
         return targetView;
+    }
+
+    public void setTargetViewAlwaysCanScroll(boolean scrollable) {
+        isTargetViewAlwaysCanScroll = scrollable;
     }
 
     public void finishRefresh() {
