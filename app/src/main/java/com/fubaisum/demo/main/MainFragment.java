@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fubaisum.demo.base.PtrLayoutFragment;
+import com.fubaisum.demo.fragment.WithListView;
 import com.fubaisum.demo.fragment.WithTextView;
 import com.fubaisum.ptrlayout.demo.R;
 
@@ -59,6 +60,13 @@ public class MainFragment extends PtrLayoutFragment {
             public void onClick(View v) {
                 WithTextView withTextView = new WithTextView();
                 showFragment(withTextView, "WithTextView");
+            }
+        }));
+        items.add(new MainItem(R.string.with_list_view, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WithListView withListView = new WithListView();
+                showFragment(withListView, "WithListView");
             }
         }));
 
