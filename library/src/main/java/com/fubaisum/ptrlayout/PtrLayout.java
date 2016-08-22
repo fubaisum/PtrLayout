@@ -18,13 +18,17 @@ public class PtrLayout extends FrameLayout {
 
     private static final String LOG_TAG = PtrLayout.class.getSimpleName();
 
-    private int targetViewId;
+    private int contentViewId;
+    private int anchorViewId;
     private int refreshViewId;
     private int loadingViewId;
-    private View targetView;
+    private View contentView;// The view maybe scroll follow RefreshView or LoadingView.
+    private View anchorView;// The view decide that the PtrLayout can start refreshing or loading.
     private RefreshView refreshView;
     private LoadingView loadingView;
 
+    private boolean canNonScrollableChildRefresh;
+    private boolean canNonScrollableChildLoading;
     private boolean isRefreshing;
     private boolean isLoading;
 
@@ -54,9 +58,10 @@ public class PtrLayout extends FrameLayout {
     private void initialize(Context context, AttributeSet attrs) {
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PtrLayout);
-        targetViewId = a.getResourceId(R.styleable.PtrLayout_target_view, 0);
-        refreshViewId = a.getResourceId(R.styleable.PtrLayout_refresh_view, 0);
-        loadingViewId = a.getResourceId(R.styleable.PtrLayout_loading_view, 0);
+        contentViewId = a.getResourceId(R.styleable.PtrLayout_ptr_content_view, 0);
+        anchorViewId = a.getResourceId(R.styleable.PtrLayout_ptr_anchor_view, 0);
+        refreshViewId = a.getResourceId(R.styleable.PtrLayout_ptr_refresh_view, 0);
+        loadingViewId = a.getResourceId(R.styleable.PtrLayout_ptr_loading_view, 0);
         a.recycle();
 
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -65,17 +70,22 @@ public class PtrLayout extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        // Find target view
-        if (targetViewId == 0) {
-            throw new NullPointerException("The target view can not be null.");
-        } else {
-            targetView = findViewById(targetViewId);
+        // Find content view
+        if (contentViewId != 0) {
+            contentView = findViewById(contentViewId);
+        }
+        // Find anchor view
+        if (anchorViewId != 0) {
+            anchorView = findViewById(anchorViewId);
         }
         // Find refresh view
         if (refreshViewId != 0) {
             View view = findViewById(refreshViewId);
             if (view instanceof RefreshView) {
                 refreshView = (RefreshView) view;
+            } else {
+                throw new IllegalArgumentException(
+                        "The refresh view must implement RefreshView interface.");
             }
         }
         // Find loading view
@@ -83,15 +93,15 @@ public class PtrLayout extends FrameLayout {
             View view = findViewById(loadingViewId);
             if (view instanceof LoadingView) {
                 loadingView = (LoadingView) view;
+            } else {
+                throw new IllegalArgumentException(
+                        "The loading view must implement LoadingView interface.");
             }
         }
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (isRefreshing || isLoading) {
-            return true;
-        }
+    public boolean dispatchTouchEvent(MotionEvent event) {
 
         final int action = MotionEventCompat.getActionMasked(event);
         switch (action) {
@@ -102,8 +112,9 @@ public class PtrLayout extends FrameLayout {
                     return false;
                 }
                 mInitialDownY = initialDownY;
+                super.dispatchTouchEvent(event);
+                return true;
             }
-            break;
             case MotionEvent.ACTION_MOVE: {
                 if (mActivePointerId == INVALID_POINTER) {
                     Log.e(LOG_TAG, "Got ACTION_MOVE event but don't have an active pointer id.");
@@ -114,81 +125,34 @@ public class PtrLayout extends FrameLayout {
                     return false;
                 }
                 final float yDiff = crrTouchY - mInitialDownY;
-                // Is pulling up for refreshing?
-                if (yDiff > mTouchSlop && !canTargetViewScrollUp()) {
-                    if (null != refreshView) {
-                        isRefreshing = true;
+                // refreshing
+                if (yDiff > mTouchSlop && refreshView != null) {
+                    if (isRefreshing) {
+                        refreshView.onPullingDown(yDiff);
                         return true;
+                    } else {
+                        if ((anchorView != null && !canAnchorViewScrollUp()) || canNonScrollableChildRefresh) {
+                            isRefreshing = true;
+                            return true;
+                        }
                     }
                 }
-                // Is pulling down for loading?
-                if (yDiff < -mTouchSlop && !canTargetViewScrollDown()) {
-                    if (null != loadingView) {
-                        isLoading = true;
+                // loading
+                if (yDiff < -mTouchSlop && loadingView != null) {
+                    if (isLoading) {
+                        loadingView.onPullingUp(yDiff);
                         return true;
+                    } else {
+                        if ((anchorView != null && !canAnchorViewScrollDown()) || canNonScrollableChildLoading) {
+                            isLoading = true;
+                            return true;
+                        }
                     }
                 }
-            }
-            break;
-            case MotionEventCompat.ACTION_POINTER_UP: {
-                onSecondaryPointerUp(event);
-            }
-            break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = INVALID_POINTER;
-            }
-            break;
-        }
-
-        return super.onInterceptTouchEvent(event);
-    }
-
-    /**
-     * @return Whether it is possible for the target view of this layout to
-     * scroll up. Override this if the target view is a custom view.
-     */
-    private boolean canTargetViewScrollUp() {
-        return ViewCompat.canScrollVertically(targetView, -1);
-    }
-
-    /**
-     * @return Whether it is possible for the target view of this layout to
-     * scroll down. Override this if the target view is a custom view.
-     */
-    private boolean canTargetViewScrollDown() {
-        return ViewCompat.canScrollVertically(targetView, 1);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        final int action = MotionEventCompat.getActionMasked(event);
-        int pointerIndex = -1;
-        switch (action) {
-            case MotionEvent.ACTION_DOWN: {
-                mActivePointerId = MotionEventCompat.getPointerId(event, 0);
                 break;
             }
-            case MotionEvent.ACTION_MOVE: {
-                pointerIndex = MotionEventCompat.findPointerIndex(event, mActivePointerId);
-                if (pointerIndex < 0) {
-                    Log.e(LOG_TAG, "Got ACTION_MOVE event but have an invalid active pointer id.");
-                    return false;
-                }
-                final float crrTouchY = MotionEventCompat.getY(event, pointerIndex);
-                final float yDiff = crrTouchY - mInitialDownY;
-                // If is refreshing
-                if (yDiff > mTouchSlop && isRefreshing) {
-                    refreshView.onPullingDown(yDiff);
-                }
-                // If is loading
-                if (yDiff < -mTouchSlop && isLoading) {
-                    loadingView.onPullingUp(yDiff);
-                }
-                return true;
-            }
             case MotionEventCompat.ACTION_POINTER_DOWN: {
-                pointerIndex = MotionEventCompat.getActionIndex(event);
+                int pointerIndex = MotionEventCompat.getActionIndex(event);
                 if (pointerIndex < 0) {
                     Log.e(LOG_TAG, "Got ACTION_POINTER_DOWN event but have an invalid action index.");
                     return false;
@@ -201,7 +165,7 @@ public class PtrLayout extends FrameLayout {
                 break;
             }
             case MotionEvent.ACTION_UP: {
-                pointerIndex = MotionEventCompat.findPointerIndex(event, mActivePointerId);
+                int pointerIndex = MotionEventCompat.findPointerIndex(event, mActivePointerId);
                 if (pointerIndex < 0) {
                     Log.e(LOG_TAG, "Got ACTION_UP event but don't have an active pointer id.");
                     return false;
@@ -213,6 +177,7 @@ public class PtrLayout extends FrameLayout {
                 if (isLoading) {
                     loadingView.onRelease();
                 }
+                break;
             }
             case MotionEvent.ACTION_CANCEL: {
                 mActivePointerId = INVALID_POINTER;
@@ -222,10 +187,26 @@ public class PtrLayout extends FrameLayout {
                 if (isLoading) {
                     loadingView.onRelease();
                 }
+                break;
             }
         }
+        return super.dispatchTouchEvent(event);
+    }
 
-        return super.onTouchEvent(event);
+    /**
+     * @return Whether it is possible for the target view of this layout to
+     * scroll up. Override this if the target view is a custom view.
+     */
+    private boolean canAnchorViewScrollUp() {
+        return ViewCompat.canScrollVertically(anchorView, -1);
+    }
+
+    /**
+     * @return Whether it is possible for the target view of this layout to
+     * scroll down. Override this if the target view is a custom view.
+     */
+    private boolean canAnchorViewScrollDown() {
+        return ViewCompat.canScrollVertically(anchorView, 1);
     }
 
     private float getMotionEventY(MotionEvent ev, int activePointerId) {
@@ -267,8 +248,44 @@ public class PtrLayout extends FrameLayout {
         isLoading = false;
     }
 
-    public View getTargetView() {
-        return targetView;
+    public View getContentView() {
+        return contentView;
+    }
+
+    public void setContentView(View contentView) {
+        this.contentView = contentView;
+    }
+
+    public View getAnchorView() {
+        return anchorView;
+    }
+
+    public void setAnchorView(View anchorView) {
+        this.anchorView = anchorView;
+    }
+
+    public void setCanNonScrollableChildRefresh(boolean childRefresh) {
+        this.canNonScrollableChildRefresh = childRefresh;
+    }
+
+    public void setCanNonScrollableChildLoading(boolean canLoading) {
+        this.canNonScrollableChildLoading = canLoading;
+    }
+
+    public RefreshView getRefreshView() {
+        return refreshView;
+    }
+
+    public void setRefreshView(RefreshView refreshView) {
+        this.refreshView = refreshView;
+    }
+
+    public LoadingView getLoadingView() {
+        return loadingView;
+    }
+
+    public void setLoadingView(LoadingView loadingView) {
+        this.loadingView = loadingView;
     }
 
     public void finishRefresh() {

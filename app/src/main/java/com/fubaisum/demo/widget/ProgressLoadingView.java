@@ -41,7 +41,7 @@ public class ProgressLoadingView extends ProgressBar implements LoadingView {
         if (height == 0) {
             height = MeasureSpec.getSize(heightMeasureSpec);
             ptrLayout = (PtrLayout) getParent();
-            targetView = ptrLayout.getTargetView();
+            targetView = ptrLayout.getContentView();
         }
     }
 

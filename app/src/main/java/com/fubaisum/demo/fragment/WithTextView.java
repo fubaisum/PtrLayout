@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import com.fubaisum.demo.base.PtrLayoutFragment;
 import com.fubaisum.ptrlayout.demo.R;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by sum on 8/9/16.
  */
@@ -19,13 +17,8 @@ public class WithTextView extends PtrLayoutFragment {
     @Override
     protected void onCreateContentView(LayoutInflater inflater, @Nullable ViewGroup contentContainer, @Nullable Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_with_textview, contentContainer);
-        ButterKnife.bind(this, contentView);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+        ptrLayout.setCanNonScrollableChildLoading(true);
+        ptrLayout.setCanNonScrollableChildRefresh(true);
     }
 
     @Override

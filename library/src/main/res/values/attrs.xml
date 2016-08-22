@@ -2,13 +2,15 @@
 <resources>
 
     <!-- PtrLayout -->
-    <attr name="target_view" format="reference" />
-    <attr name="refresh_view" format="reference" />
-    <attr name="loading_view" format="reference" />
+    <attr name="ptr_content_view" format="reference" />
+    <attr name="ptr_anchor_view" format="reference" />
+    <attr name="ptr_refresh_view" format="reference" />
+    <attr name="ptr_loading_view" format="reference" />
     <declare-styleable name="PtrLayout">
-        <attr name="target_view" />
-        <attr name="refresh_view" />
-        <attr name="loading_view" />
+        <attr name="ptr_content_view" />
+        <attr name="ptr_anchor_view" />
+        <attr name="ptr_refresh_view" />
+        <attr name="ptr_loading_view" />
     </declare-styleable>
 
 </resources>

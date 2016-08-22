@@ -17,6 +17,7 @@ public class WithListView extends PtrLayoutFragment {
     @Override
     protected void onCreateContentView(LayoutInflater inflater, @Nullable ViewGroup contentContainer, @Nullable Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_with_listview, contentContainer);
+        ptrLayout.setAnchorView(contentView);
     }
 
     @Override
