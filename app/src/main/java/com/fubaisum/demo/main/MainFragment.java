@@ -36,6 +36,9 @@ public class MainFragment extends PtrLayoutFragment {
     protected void onCreateContentView(LayoutInflater inflater, @Nullable ViewGroup contentContainer, @Nullable Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_with_recycler_view, contentContainer);
         ButterKnife.bind(this, contentView);
+
+        ptrLayout.setAnchorView(recyclerView);
+
         initializeView();
     }
 
@@ -69,6 +72,13 @@ public class MainFragment extends PtrLayoutFragment {
                 showFragment(withListView, "WithListView");
             }
         }));
+        items.add(new MainItem(R.string.null_operation, null));
+        items.add(new MainItem(R.string.null_operation, null));
+        items.add(new MainItem(R.string.null_operation, null));
+        items.add(new MainItem(R.string.null_operation, null));
+        items.add(new MainItem(R.string.null_operation, null));
+        items.add(new MainItem(R.string.null_operation, null));
+        items.add(new MainItem(R.string.null_operation, null));
 
         return items;
     }

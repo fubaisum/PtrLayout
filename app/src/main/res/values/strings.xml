@@ -3,4 +3,6 @@
 
     <string name="with_text_view">With TextView</string>
     <string name="with_list_view">With ListView</string>
+
+    <string name="null_operation">Null Operation</string>
 </resources>
