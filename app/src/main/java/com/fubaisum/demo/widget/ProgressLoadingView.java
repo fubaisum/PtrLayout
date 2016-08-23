@@ -3,6 +3,7 @@ package com.fubaisum.demo.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
@@ -98,5 +99,28 @@ public class ProgressLoadingView extends ProgressBar implements LoadingView {
     @Override
     public void onLoadingFinished() {
         startExitAnimation();
+    }
+
+    @Override
+    public void autoLoading() {
+        ValueAnimator startAnimator = ValueAnimator.ofFloat(0, -height);
+        startAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            private boolean isRelease;
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float offset = (float) animation.getAnimatedValue();
+                // simulate pulling up
+                onPullingUp(offset);
+                Log.e("TAG", "offset = " + offset);
+                if (offset <= -height && !isRelease) {
+                    isRelease = true;
+                    onRelease();
+                }
+            }
+        });
+        startAnimator.setDuration(EXIT_ANIM_DURATION);
+        startAnimator.start();
     }
 }

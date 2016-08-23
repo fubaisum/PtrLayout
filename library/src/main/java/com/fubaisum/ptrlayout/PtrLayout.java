@@ -264,6 +264,18 @@ public class PtrLayout extends FrameLayout {
         this.anchorView = anchorView;
     }
 
+    public void autoRefresh() {
+        if (refreshView != null) {
+            refreshView.autoRefresh();
+        }
+    }
+
+    public void autoLoading() {
+        if (loadingView != null) {
+            loadingView.autoLoading();
+        }
+    }
+
     public void setCanNonScrollableChildRefresh(boolean childRefresh) {
         this.canNonScrollableChildRefresh = childRefresh;
     }

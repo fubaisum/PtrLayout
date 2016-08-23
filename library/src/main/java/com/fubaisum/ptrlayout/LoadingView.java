@@ -10,4 +10,6 @@ public interface LoadingView {
     void onRelease();
 
     void onLoadingFinished();
+
+    void autoLoading();
 }

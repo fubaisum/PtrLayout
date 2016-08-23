@@ -99,4 +99,26 @@ public class ProgressRefreshView extends ProgressBar implements RefreshView {
     public void onRefreshFinished() {
         startExitAnimation();
     }
+
+    @Override
+    public void autoRefresh() {
+        ValueAnimator startAnimator = ValueAnimator.ofFloat(0, height);
+        startAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            private boolean isRelease;
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float offset = (float) animation.getAnimatedValue();
+                // simulate pulling down
+                onPullingDown(offset);
+                if (offset >= height && !isRelease) {
+                    isRelease = true;
+                    onRelease();
+                }
+            }
+        });
+        startAnimator.setDuration(EXIT_ANIM_DURATION);
+        startAnimator.start();
+    }
 }

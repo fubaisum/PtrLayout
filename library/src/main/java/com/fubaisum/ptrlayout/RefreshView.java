@@ -10,4 +10,6 @@ public interface RefreshView {
     void onRelease();
 
     void onRefreshFinished();
+
+    void autoRefresh();
 }

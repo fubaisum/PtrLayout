@@ -18,6 +18,14 @@ public class WithTextView extends PtrLayoutFragment {
     protected void onCreateContentView(LayoutInflater inflater, @Nullable ViewGroup contentContainer, @Nullable Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_with_textview, contentContainer);
         ptrLayout.setCanNonScrollableChildRefresh(true);
+
+        // auto refresh
+        ptrLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ptrLayout.autoRefresh();
+            }
+        }, 200);
     }
 
     @Override
