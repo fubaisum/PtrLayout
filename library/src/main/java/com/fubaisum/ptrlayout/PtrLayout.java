@@ -126,7 +126,7 @@ public class PtrLayout extends FrameLayout {
                 }
                 final float yDiff = crrTouchY - mInitialDownY;
                 // refreshing
-                if (yDiff > mTouchSlop && refreshView != null) {
+                if (yDiff > mTouchSlop && !isLoading && refreshView != null) {
                     if (isRefreshing) {
                         refreshView.onPullingDown(yDiff);
                         return true;
@@ -138,7 +138,7 @@ public class PtrLayout extends FrameLayout {
                     }
                 }
                 // loading
-                if (yDiff < -mTouchSlop && loadingView != null) {
+                if (yDiff < -mTouchSlop && !isRefreshing && loadingView != null) {
                     if (isLoading) {
                         loadingView.onPullingUp(yDiff);
                         return true;
@@ -149,6 +149,12 @@ public class PtrLayout extends FrameLayout {
                         }
                     }
                 }
+
+                // Can't move child when is refreshing or loading
+                if (isRefreshing || isLoading) {
+                    return true;
+                }
+
                 break;
             }
             case MotionEventCompat.ACTION_POINTER_DOWN: {
@@ -266,12 +272,14 @@ public class PtrLayout extends FrameLayout {
 
     public void autoRefresh() {
         if (refreshView != null) {
+            isRefreshing = true;
             refreshView.autoRefresh();
         }
     }
 
     public void autoLoading() {
         if (loadingView != null) {
+            isLoading = true;
             loadingView.autoLoading();
         }
     }
@@ -313,7 +321,7 @@ public class PtrLayout extends FrameLayout {
     }
 
     /**
-     * 回调接口：刷新
+     * Callback for refreshing
      */
     public interface OnRefreshListener {
         void onRefresh();
@@ -327,7 +335,7 @@ public class PtrLayout extends FrameLayout {
     }
 
     /**
-     * 回调接口：加载
+     * Callback for loading
      */
     public interface OnLoadingListener {
         void onLoading();

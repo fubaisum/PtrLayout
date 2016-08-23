@@ -29,7 +29,9 @@ class MainItemAdapter extends AbsDelegationAdapter<MainItem>
             return;
         }
         MainItem item = items.get(position);
-        item.onClickListener.onClick(null);
+        if (item.onClickListener != null) {
+            item.onClickListener.onClick(null);
+        }
     }
 
 }
