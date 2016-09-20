@@ -12,7 +12,7 @@ repositories {
 
 # Add dependency
 ```gradle
-    compile 'com.fubaisum.ptrlayout:library:1.0.0'
+    compile 'com.fubaisum.ptrlayout:library:1.0.3'
 ```
 
 # Usage
