@@ -111,6 +111,7 @@ public class PtrLayout extends FrameLayout {
                 if (initialDownY == -1) {
                     return false;
                 }
+
                 mInitialDownY = initialDownY;
                 super.dispatchTouchEvent(event);
                 return true;
@@ -124,6 +125,7 @@ public class PtrLayout extends FrameLayout {
                 if (crrTouchY == -1) {
                     return false;
                 }
+
                 final float yDiff = crrTouchY - mInitialDownY;
                 // refreshing
                 if (yDiff > mTouchSlop && !isLoading && refreshView != null) {
@@ -163,6 +165,7 @@ public class PtrLayout extends FrameLayout {
                     Log.e(LOG_TAG, "Got ACTION_POINTER_DOWN event but have an invalid action index.");
                     return false;
                 }
+
                 mActivePointerId = MotionEventCompat.getPointerId(event, pointerIndex);
                 break;
             }
@@ -179,9 +182,17 @@ public class PtrLayout extends FrameLayout {
                 mActivePointerId = INVALID_POINTER;
                 if (isRefreshing) {
                     refreshView.onRelease();
+                    // send cancel event to children
+                    event.setAction(MotionEvent.ACTION_CANCEL);
+                    super.dispatchTouchEvent(event);
+                    return true;
                 }
                 if (isLoading) {
                     loadingView.onRelease();
+                    // send cancel event to children
+                    event.setAction(MotionEvent.ACTION_CANCEL);
+                    super.dispatchTouchEvent(event);
+                    return true;
                 }
                 break;
             }
