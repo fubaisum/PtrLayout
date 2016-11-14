@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/fubaisum/PtrLayout'
     gitUrl = 'https://github.com/fubaisum/PtrLayout.git'
 
-    libraryVersion = '1.0.4'
+    libraryVersion = '1.0.5'
 
     developerId = 'scausum'
     developerName = 'SCAU SUM'
@@ -36,8 +36,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 104
-        versionName "1.0.4"
+        versionCode 105
+        versionName "1.0.5"
     }
     buildTypes {
         release {

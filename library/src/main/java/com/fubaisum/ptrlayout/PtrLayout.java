@@ -106,12 +106,15 @@ public class PtrLayout extends FrameLayout {
         final int action = MotionEventCompat.getActionMasked(event);
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                mActivePointerId = MotionEventCompat.getPointerId(event, 0);
+                if (isRefreshing || isLoading) {
+                    return true;
+                }
+
+                mActivePointerId = event.getPointerId(0);
                 final float initialDownY = getMotionEventY(event, mActivePointerId);
                 if (initialDownY == -1) {
                     return false;
                 }
-
                 mInitialDownY = initialDownY;
                 super.dispatchTouchEvent(event);
                 return true;
@@ -166,7 +169,7 @@ public class PtrLayout extends FrameLayout {
                     return false;
                 }
 
-                mActivePointerId = MotionEventCompat.getPointerId(event, pointerIndex);
+                mActivePointerId = event.getPointerId(pointerIndex);
                 break;
             }
             case MotionEventCompat.ACTION_POINTER_UP: {
@@ -174,7 +177,7 @@ public class PtrLayout extends FrameLayout {
                 break;
             }
             case MotionEvent.ACTION_UP: {
-                int pointerIndex = MotionEventCompat.findPointerIndex(event, mActivePointerId);
+                int pointerIndex = event.findPointerIndex(mActivePointerId);
                 if (pointerIndex < 0) {
                     Log.e(LOG_TAG, "Got ACTION_UP event but don't have an active pointer id.");
                     return false;
@@ -226,22 +229,19 @@ public class PtrLayout extends FrameLayout {
         return ViewCompat.canScrollVertically(anchorView, 1);
     }
 
-    private float getMotionEventY(MotionEvent ev, int activePointerId) {
-        final int index = MotionEventCompat.findPointerIndex(ev, activePointerId);
-        if (index < 0) {
-            return -1;
-        }
-        return MotionEventCompat.getY(ev, index);
+    private float getMotionEventY(MotionEvent event, int activePointerId) {
+        final int index = event.findPointerIndex(activePointerId);
+        return index < 0 ? -1 : event.getY(index);
     }
 
-    private void onSecondaryPointerUp(MotionEvent ev) {
-        final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-        final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+    private void onSecondaryPointerUp(MotionEvent event) {
+        final int pointerIndex = MotionEventCompat.getActionIndex(event);
+        final int pointerId = event.getPointerId(pointerIndex);
         if (pointerId == mActivePointerId) {
             // This was our active pointer going up. Choose a new
             // active pointer and adjust accordingly.
             final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-            mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+            mActivePointerId = event.getPointerId(newPointerIndex);
         }
     }
 
