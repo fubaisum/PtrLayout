@@ -28,7 +28,7 @@ public abstract class PtrLayoutFragment extends Fragment
         ptrLayout = (PtrLayout) rootView.findViewById(R.id.ptr_layout);
         ptrLayout.setOnRefreshListener(this);
         ptrLayout.setOnLoadingListener(this);
-        FrameLayout contentContainer = (FrameLayout) rootView.findViewById(R.id.ptr_container);
+        FrameLayout contentContainer = (FrameLayout) rootView.findViewById(R.id.ptr_content);
         onCreateContentView(inflater, contentContainer, savedInstanceState);
 
         return rootView;

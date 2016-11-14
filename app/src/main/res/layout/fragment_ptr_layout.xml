@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    app:ptr_content_view="@+id/ptr_container"
+    app:ptr_content_view="@+id/ptr_content"
     app:ptr_loading_view="@+id/ptr_loading"
     app:ptr_refresh_view="@+id/ptr_refresh">
 
     <FrameLayout
-        android:id="@+id/ptr_container"
+        android:id="@+id/ptr_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
