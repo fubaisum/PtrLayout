@@ -1,4 +1,4 @@
-package com.fubaisum.demo.widget;
+package com.scausum.demo.widget;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
-import com.fubaisum.ptrlayout.LoadingView;
-import com.fubaisum.ptrlayout.PtrLayout;
+import com.scausum.ptrlayout.PtrLayout;
+import com.scausum.ptrlayout.RefreshView;
 
 /**
  * Created by sum on 8/6/16.
  */
-public class ProgressLoadingView extends ProgressBar implements LoadingView {
+public class ProgressRefreshView extends ProgressBar implements RefreshView {
 
     private int height;
     private static final int EXIT_ANIM_DURATION = 600;
@@ -22,15 +22,15 @@ public class ProgressLoadingView extends ProgressBar implements LoadingView {
     private PtrLayout ptrLayout;
     private View targetView;
 
-    public ProgressLoadingView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public ProgressLoadingView(Context context) {
+    public ProgressRefreshView(Context context) {
         super(context);
     }
 
-    public ProgressLoadingView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ProgressRefreshView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public ProgressRefreshView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -46,29 +46,28 @@ public class ProgressLoadingView extends ProgressBar implements LoadingView {
     }
 
     @Override
-    public void onPullingUp(float offset) {
+    public void onPullingDown(float offset) {
         // calculate the target view's translationY.
-        offset = -offset;
         offset = Math.min(height, offset);
         offset = Math.max(0, offset);
-        int translationY = -(int) (decelerateInterpolator.getInterpolation(offset / height) * offset);
-        // move up target view.
+        int translationY = (int) (decelerateInterpolator.getInterpolation(offset / height) * offset);
+        // move down target view.
         targetView.setTranslationY(translationY);
-        // move up myself.
+        // move down myself
         setTranslationY(translationY);
     }
 
     @Override
     public void onRelease() {
-        if ((int) getTranslationY() > -height) {
+        if ((int) getTranslationY() < height) {
             startExitAnimation();
         } else {
-            startLoadingAnimation();
+            startRefreshingAnimation();
         }
     }
 
-    private void startLoadingAnimation() {
-        ptrLayout.notifyLoadingAnimationStart();
+    private void startRefreshingAnimation() {
+        ptrLayout.notifyRefreshAnimationStart();
     }
 
     private void startExitAnimation() {
@@ -77,32 +76,33 @@ public class ProgressLoadingView extends ProgressBar implements LoadingView {
         exitAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
+                // calculate the target view's translationY.
                 float targetTranslationY = (float) animation.getAnimatedValue();
-                float ratio = decelerateInterpolator.getInterpolation(-targetTranslationY / height);
+                float ratio = decelerateInterpolator.getInterpolation(targetTranslationY / height);
                 targetTranslationY = ratio * targetTranslationY;
-                // move down contentView.
+                // move up target view.
                 targetView.setTranslationY(targetTranslationY);
-                // move down myself.
+                // move up myself.
                 setTranslationY(targetTranslationY);
 
-                if (targetTranslationY >= 0) {
-                    // notify ptrLayout the loading animation finished.
-                    ptrLayout.notifyLoadingAnimationStop();
+                if (targetTranslationY <= 0) {
+                    // notify ptrLayout the refresh animation finished.
+                    ptrLayout.notifyRefreshAnimationStop();
                 }
             }
         });
-        exitAnimator.setDuration(EXIT_ANIM_DURATION * (int) (-crrTranslationY) / height);
+        exitAnimator.setDuration(EXIT_ANIM_DURATION * (int) (crrTranslationY) / height);
         exitAnimator.start();
     }
 
     @Override
-    public void onLoadingFinished() {
+    public void onRefreshFinished() {
         startExitAnimation();
     }
 
     @Override
-    public void autoLoading() {
-        ValueAnimator startAnimator = ValueAnimator.ofFloat(0, -height);
+    public void autoRefresh() {
+        ValueAnimator startAnimator = ValueAnimator.ofFloat(0, height);
         startAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             private boolean isRelease;
@@ -110,9 +110,9 @@ public class ProgressLoadingView extends ProgressBar implements LoadingView {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float offset = (float) animation.getAnimatedValue();
-                // simulate pulling up
-                onPullingUp(offset);
-                if (offset <= -height && !isRelease) {
+                // simulate pulling down
+                onPullingDown(offset);
+                if (offset >= height && !isRelease) {
                     isRelease = true;
                     onRelease();
                 }

@@ -1,4 +1,4 @@
-package com.fubaisum.demo.main;
+package com.scausum.demo.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fubaisum.demo.base.PtrLayoutFragment;
-import com.fubaisum.demo.fragment.WithListView;
-import com.fubaisum.demo.fragment.WithTextView;
 import com.fubaisum.ptrlayout.demo.R;
+import com.scausum.demo.base.PtrLayoutFragment;
+import com.scausum.demo.fragment.WithListView;
+import com.scausum.demo.fragment.WithTextView;
 
 import java.util.ArrayList;
 import java.util.List;

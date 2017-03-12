@@ -1,4 +1,4 @@
-package com.fubaisum.demo.fragment;
+package com.scausum.demo.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,24 +6,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fubaisum.demo.base.PtrLayoutFragment;
 import com.fubaisum.ptrlayout.demo.R;
+import com.scausum.demo.base.PtrLayoutFragment;
 
 /**
  * Created by sum on 8/9/16.
  */
-public class WithTextView extends PtrLayoutFragment {
+public class WithListView extends PtrLayoutFragment {
 
     @Override
     protected void onCreateContentView(LayoutInflater inflater, @Nullable ViewGroup contentContainer, @Nullable Bundle savedInstanceState) {
-        View contentView = inflater.inflate(R.layout.fragment_with_textview, contentContainer);
-        ptrLayout.setCanNonScrollableChildRefresh(true);
+        View contentView = inflater.inflate(R.layout.fragment_with_listview, contentContainer);
+        ptrLayout.setAnchorView(contentView);
 
-        // auto refresh
+        // auto loading
         ptrLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ptrLayout.autoRefresh();
+                ptrLayout.autoLoading();
             }
         }, 200);
     }

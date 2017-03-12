@@ -1,30 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'ptr-layout'
-
-    publishedGroupId = 'com.fubaisum.ptrlayout'
-    libraryName = 'ptr-layout'
-    artifact = 'library'
-
-    libraryDescription = 'A handy pull-to-refreshing library.'
-
-    siteUrl = 'https://github.com/fubaisum/PtrLayout'
-    gitUrl = 'https://github.com/fubaisum/PtrLayout.git'
-
-    libraryVersion = '1.0.5'
-
-    developerId = 'scausum'
-    developerName = 'SCAU SUM'
-    developerEmail = 'scausum@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
 
 android {
 
@@ -57,5 +31,6 @@ dependencies {
     compile "com.android.support:support-v4:${rootProject.ext.supportLibraryVersion}"
 }
 
-apply from:"../scripts/install.gradle"
-apply from:"../scripts/bintray.gradle"
+// Used to update in Maven
+apply from: '../maven_upload_scripts/install.gradle'
+apply from: '../maven_upload_scripts/bintray.gradle'

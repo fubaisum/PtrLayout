@@ -1,4 +1,4 @@
-package com.fubaisum.ptrlayout;
+package com.scausum.ptrlayout;
 
 /**
  * Created by sum on 8/6/16.

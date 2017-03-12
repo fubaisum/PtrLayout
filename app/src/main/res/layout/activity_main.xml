@@ -4,10 +4,10 @@
     android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fubaisum.demo.main.MainActivity">
+    tools:context="com.scausum.demo.main.MainActivity">
 
     <fragment
-        android:name="com.fubaisum.demo.main.MainFragment"
+        android:name="com.scausum.demo.main.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="MainFragment" />

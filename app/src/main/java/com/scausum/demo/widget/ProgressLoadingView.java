@@ -1,4 +1,4 @@
-package com.fubaisum.demo.widget;
+package com.scausum.demo.widget;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
-import com.fubaisum.ptrlayout.PtrLayout;
-import com.fubaisum.ptrlayout.RefreshView;
+import com.scausum.ptrlayout.LoadingView;
+import com.scausum.ptrlayout.PtrLayout;
 
 /**
  * Created by sum on 8/6/16.
  */
-public class ProgressRefreshView extends ProgressBar implements RefreshView {
+public class ProgressLoadingView extends ProgressBar implements LoadingView {
 
     private int height;
     private static final int EXIT_ANIM_DURATION = 600;
@@ -22,15 +22,15 @@ public class ProgressRefreshView extends ProgressBar implements RefreshView {
     private PtrLayout ptrLayout;
     private View targetView;
 
-    public ProgressRefreshView(Context context) {
-        super(context);
-    }
-
-    public ProgressRefreshView(Context context, AttributeSet attrs) {
+    public ProgressLoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ProgressRefreshView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ProgressLoadingView(Context context) {
+        super(context);
+    }
+
+    public ProgressLoadingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -46,28 +46,29 @@ public class ProgressRefreshView extends ProgressBar implements RefreshView {
     }
 
     @Override
-    public void onPullingDown(float offset) {
+    public void onPullingUp(float offset) {
         // calculate the target view's translationY.
+        offset = -offset;
         offset = Math.min(height, offset);
         offset = Math.max(0, offset);
-        int translationY = (int) (decelerateInterpolator.getInterpolation(offset / height) * offset);
-        // move down target view.
+        int translationY = -(int) (decelerateInterpolator.getInterpolation(offset / height) * offset);
+        // move up target view.
         targetView.setTranslationY(translationY);
-        // move down myself
+        // move up myself.
         setTranslationY(translationY);
     }
 
     @Override
     public void onRelease() {
-        if ((int) getTranslationY() < height) {
+        if ((int) getTranslationY() > -height) {
             startExitAnimation();
         } else {
-            startRefreshingAnimation();
+            startLoadingAnimation();
         }
     }
 
-    private void startRefreshingAnimation() {
-        ptrLayout.notifyRefreshAnimationStart();
+    private void startLoadingAnimation() {
+        ptrLayout.notifyLoadingAnimationStart();
     }
 
     private void startExitAnimation() {
@@ -76,33 +77,32 @@ public class ProgressRefreshView extends ProgressBar implements RefreshView {
         exitAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                // calculate the target view's translationY.
                 float targetTranslationY = (float) animation.getAnimatedValue();
-                float ratio = decelerateInterpolator.getInterpolation(targetTranslationY / height);
+                float ratio = decelerateInterpolator.getInterpolation(-targetTranslationY / height);
                 targetTranslationY = ratio * targetTranslationY;
-                // move up target view.
+                // move down contentView.
                 targetView.setTranslationY(targetTranslationY);
-                // move up myself.
+                // move down myself.
                 setTranslationY(targetTranslationY);
 
-                if (targetTranslationY <= 0) {
-                    // notify ptrLayout the refresh animation finished.
-                    ptrLayout.notifyRefreshAnimationStop();
+                if (targetTranslationY >= 0) {
+                    // notify ptrLayout the loading animation finished.
+                    ptrLayout.notifyLoadingAnimationStop();
                 }
             }
         });
-        exitAnimator.setDuration(EXIT_ANIM_DURATION * (int) (crrTranslationY) / height);
+        exitAnimator.setDuration(EXIT_ANIM_DURATION * (int) (-crrTranslationY) / height);
         exitAnimator.start();
     }
 
     @Override
-    public void onRefreshFinished() {
+    public void onLoadingFinished() {
         startExitAnimation();
     }
 
     @Override
-    public void autoRefresh() {
-        ValueAnimator startAnimator = ValueAnimator.ofFloat(0, height);
+    public void autoLoading() {
+        ValueAnimator startAnimator = ValueAnimator.ofFloat(0, -height);
         startAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             private boolean isRelease;
@@ -110,9 +110,9 @@ public class ProgressRefreshView extends ProgressBar implements RefreshView {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float offset = (float) animation.getAnimatedValue();
-                // simulate pulling down
-                onPullingDown(offset);
-                if (offset >= height && !isRelease) {
+                // simulate pulling up
+                onPullingUp(offset);
+                if (offset <= -height && !isRelease) {
                     isRelease = true;
                     onRelease();
                 }

@@ -1,4 +1,4 @@
-package com.fubaisum.demo.main;
+package com.scausum.demo.main;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

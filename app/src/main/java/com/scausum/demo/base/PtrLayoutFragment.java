@@ -1,4 +1,4 @@
-package com.fubaisum.demo.base;
+package com.scausum.demo.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,8 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.fubaisum.ptrlayout.PtrLayout;
 import com.fubaisum.ptrlayout.demo.R;
+import com.scausum.ptrlayout.PtrLayout;
+
 
 /**
  * Created by sum on 8/9/16.

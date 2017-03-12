@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.fubaisum.ptrlayout.PtrLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scausum.ptrlayout.PtrLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ptr_layout"
     android:layout_width="match_parent"
@@ -16,7 +16,7 @@
 
     </FrameLayout>
 
-    <com.fubaisum.demo.widget.ProgressRefreshView
+    <com.scausum.demo.widget.ProgressRefreshView
         android:id="@+id/ptr_refresh"
         style="?android:attr/progressBarStyleInverse"
         android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_gravity="top|center_horizontal"
         android:layout_marginTop="-100dp" />
 
-    <com.fubaisum.demo.widget.ProgressLoadingView
+    <com.scausum.demo.widget.ProgressLoadingView
         android:id="@+id/ptr_loading"
         style="?android:attr/indeterminateProgressStyle"
         android:layout_width="wrap_content"
@@ -32,4 +32,4 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="-100dp" />
 
-</com.fubaisum.ptrlayout.PtrLayout>
+</com.scausum.ptrlayout.PtrLayout>
