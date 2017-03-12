@@ -37,5 +37,5 @@ dependencies {
     compile "com.fubaisum.adapterdelegate:recycler-adapter-delegate:${rootProject.ext.adapterDelegatesVersion}"
     compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
 
-    compile project(':library')
+    compile project(':ptr-layout')
 }
