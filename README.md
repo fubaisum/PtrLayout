@@ -5,14 +5,14 @@ A handy pull-to-refresh layout.
 ```gradle
 repositories {
     maven {
-        url 'https://dl.bintray.com/fubaisum/maven/'
+        url 'https://dl.bintray.com/scausum/maven/'
     }
 }
 ```
 
 # Add dependency
 ```gradle
-    compile 'com.fubaisum.ptrlayout:library:1.0.5'
+    compile 'com.scausum.ptrlayout:library:0.3.0'
 ```
 
 # Usage
@@ -20,7 +20,7 @@ repositories {
 
 # License
 ```
-Copyright 2016 fubaisum.
+Copyright 2016 Jiajie Shen.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
