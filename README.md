@@ -12,7 +12,7 @@ repositories {
 
 # Add dependency
 ```gradle
-    compile 'com.scausum.ptrlayout:library:0.3.0'
+    compile 'com.scausum.ptrlayout:ptr-layout:0.3.0'
 ```
 
 # Usage
