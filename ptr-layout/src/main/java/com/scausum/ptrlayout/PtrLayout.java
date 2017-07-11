@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
-import com.fubaisum.ptrlayout.R;
-
 /**
  * Created by sum on 8/6/16.
  */
